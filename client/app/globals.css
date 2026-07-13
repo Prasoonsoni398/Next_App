@@ -1,0 +1,10 @@
+@import "tailwindcss";
+
+a:hover{
+    color:blue;
+}
+
+@theme inline{
+    --font-roboto: var(--font-roboto);
+    --font-work: var(--font-work-sans)
+}   
