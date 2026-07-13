@@ -9,7 +9,7 @@ interface UserLayoutProps{
 export default function RootLAyout({ children }:UserLayoutProps) {
   return (
 
-    <div className="min-h-screen  p-6">
+    <div className="min-h-screen ">
 
       {children}
     </div>
