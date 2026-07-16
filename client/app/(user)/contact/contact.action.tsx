@@ -1,28 +1,42 @@
 "use server";
 
-interface ContactActionProps{
-  fullName:string;
-  email:string;
-  message:string;
+interface ContactActionProps {
+  fullName: string;
+  email: string;
+  message: string;
 }
 
 import { db } from "@/config/db";
 import { redirect } from "next/navigation";
 
-export const contactAction = async (formData:FormData) => {
+export const contactAction = async (formData: FormData) => {
   // console.log("previousState", previousState);
   try {
-    const { fullName, email, message } = Object.fromEntries(formData.entries());
-    // console.log(fullName, email, message);
+    const { fullName, email, message } = Object.fromEntries(
+      formData.entries(),
+    ) as {
+      fullName: string;
+      email: string;
+      message: string;
+    };
+
     await db.execute(
-      `insert into contact_form (full_name, email, message) values (?, ? , ?)`,
-      [fullName, email, message]
+      `INSERT INTO contact_form (full_name, email, message)
+     VALUES (?, ?, ?)`,
+      [fullName, email, message],
     );
-    return { success: true, message: "form submitted successfully" };
-    // redirect("/");
-  } catch (error: any) {
-    if (error.message === "NEXT_REDIRECT") throw error;
-    return { success: false, message: "error while submitting" };
+
+    return {
+      success: true,
+      message: "Form submitted successfully",
+    };
+  } catch (error) {
+    console.error(error);
+
+    return {
+      success: false,
+      message: "Error while submitting form",
+    };
   }
 };
 

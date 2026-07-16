@@ -1,28 +1,38 @@
 "use client";
 
-import { useActionState, useState, useTransition } from "react";
+import { useActionState, useState, useTransition, useEffect } from "react";
 import { contactAction } from "./contact.action";
 import { useFormStatus } from "react-dom";
 import { Loader } from "lucide-react";
 
-interface ContactProps{
-    fullName:string;
-    email:string;
-    message:string;
+interface ContactProps {
+  fullName: string;
+  email: string;
+  message: string;
 }
-
-
 
 const Contact = () => {
   // const [state, formAction, isPending] = useActionState(contactAction, null);
   const [isPending, startTransition] = useTransition();
-  const [contactFormResponse, setContactFormResponse] = useState<{success: boolean; message: string} | null>(null);
+  const [contactFormResponse, setContactFormResponse] = useState<{
+    success: boolean;
+    message: string;
+  } | null>(null);
 
-  const handleContactSubmit = (formData:FormData) => {
+  useEffect(() => {
+    if (contactFormResponse) {
+      const timer = setTimeout(() => {
+        setContactFormResponse(null);
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [contactFormResponse]);
+
+  const handleContactSubmit = (formData: FormData) => {
     startTransition(async () => {
       const res = await contactAction(formData);
       console.log("from client component");
-      
+
       setContactFormResponse(res);
     });
   };
@@ -101,8 +111,10 @@ const Contact = () => {
             <section>
               {contactFormResponse && (
                 <p
-                  className={` p-4 mt-5 text-center capitalize ${
-                    contactFormResponse.success ? "bg-green-500" : "bg-red-500"
+                  className={` p-4 mt-5 text-center capitalize font-medium rounded-md ${
+                    contactFormResponse.success
+                      ? "bg-green-200 text-green-900 border-green-900"
+                      : "bg-red-200 text-red-900 border-red-900"
                   }`}
                 >
                   {contactFormResponse.message}
