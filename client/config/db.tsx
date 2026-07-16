@@ -8,14 +8,11 @@ export const db = mysql.createPool({
     database:"hospital_db"
 })
 
-
-try{
-    const connection = await db.getConnection()
-    console.log("Database Connected Successfully");
-    connection.release()
-}
-catch(err){
-    console.log("Database connection failed:",err);
-    process.exit(1)
-    
+try {
+  const connection = await db.getConnection();
+  //   console.log("✅ Database connected successfully.");
+  connection.release(); // important to release back to pool
+} catch (err) {
+  console.error("❌ Database connection failed:", err);
+  process.exit(1); // optional: stop server if DB is essential
 }

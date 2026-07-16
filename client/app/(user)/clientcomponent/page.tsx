@@ -14,12 +14,19 @@ interface Post {
 
 const clientComponent = () => {
     const [postData, setPostData] = useState<Post[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+    
     const fetchData = async () => {
-        const res = await fetch(URL);
-        const data = await res.json()
-        console.log(data)
-        setPostData(data)
-
+        setIsLoading(true);
+        try {
+            const res = await fetch(URL);
+            const data = await res.json()
+            setPostData(data)
+        } catch (error) {
+            console.error("Error fetching data:", error)
+        } finally {
+            setIsLoading(false);
+        }
     }
 
 
@@ -37,11 +44,17 @@ const clientComponent = () => {
             <Counter />
 
             <ul className="grid grid-cols-4 gap-4 mt-4  ">
-                <div className="bg-gray-800">
-                    {postData.map((curElem, index) =>
-                    (<li key={index} className="bg-gray-200 p-4 rounded-md hover:bg-gray-400 hover:text-blue-800  transition-colors duration-300">
-                        {curElem.body}
-                    </li>)
+                <div className="bg-gray-800 col-span-4 rounded-xl p-4 gap-4 grid grid-cols-4">
+                    {isLoading ? (
+                        Array.from({ length: 8 }).map((_, index) => (
+                            <li key={index} className="bg-gray-700 h-24 p-4 rounded-md animate-pulse"></li>
+                        ))
+                    ) : (
+                        postData.map((curElem, index) =>
+                        (<li key={index} className="bg-gray-200 p-4 rounded-md hover:bg-gray-400 hover:text-blue-800  transition-colors duration-300">
+                            {curElem.body}
+                        </li>)
+                        )
                     )}
                 </div>
             </ul>

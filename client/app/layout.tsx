@@ -5,6 +5,7 @@ import {Work_Sans} from "next/font/google"
 import { ReactNode } from "react";
 
 const roboto = Roboto({
+  weight: ["400", "500", "700", "900"],
   subsets: ["latin"],
   variable: "--font-roboto"
 })
@@ -21,7 +22,7 @@ interface RootLayoutProps {
 export default function RootLayout({ children }: RootLayoutProps){
   return(
     <html lang="en">
-      <body className={` ${roboto.className} ${workSans.className}`}>
+      <body className={` ${roboto.className} ${workSans.className} bg-gray-700` }>
         <Navigation/>
         {children}
       </body>
