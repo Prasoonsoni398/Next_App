@@ -1,4 +1,6 @@
 "use server";
+import { db } from "@/config/db";
+import { redirect } from "next/navigation";
 
 interface ContactActionProps {
   fullName: string;
@@ -6,8 +8,6 @@ interface ContactActionProps {
   message: string;
 }
 
-import { db } from "@/config/db";
-import { redirect } from "next/navigation";
 
 export const contactAction = async (formData: FormData) => {
   // console.log("previousState", previousState);
@@ -26,18 +26,23 @@ export const contactAction = async (formData: FormData) => {
       [fullName, email, message],
     );
 
-    return {
-      success: true,
-      message: "Form submitted successfully",
-    };
-  } catch (error) {
-    console.error(error);
-
-    return {
-      success: false,
-      message: "Error while submitting form",
-    };
-  }
-};
+    
+    // return {
+      //   success: true,
+      //   message: "Form submitted successfully",
+      // };
+      redirect("/");
+    } catch (error) {
+      if (error instanceof Error && error.message === "NEXT_REDIRECT") {
+        throw error;
+      }
+      console.error(error);
+      
+      return {
+        success: false,
+        message: "Error while submitting form",
+      };
+    }
+  };
 
 // redirect() is a server-only function. It throws a special Next.js response to perform a server-side redirect — which only works during server-side rendering (SSR), server actions, or loaders.

@@ -33,7 +33,9 @@ const Contact = () => {
       const res = await contactAction(formData);
       console.log("from client component");
 
-      setContactFormResponse(res);
+      if (res) {
+        setContactFormResponse(res);
+      }
     });
   };
 
@@ -62,7 +64,7 @@ const Contact = () => {
                     id="fullName"
                     name="fullName"
                     required
-                    className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-colors duration-200 text-white placeholder-gray-400"
+                    className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg outline-none focus:ring-1 focus:ring-pink-500 focus:border-pink-500 transition-colors duration-200 text-white placeholder-gray-400"
                     placeholder="Enter your full name"
                   />
                 </div>
@@ -80,7 +82,7 @@ const Contact = () => {
                     id="email"
                     name="email"
                     required
-                    className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-colors duration-200 text-white placeholder-gray-400"
+                    className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:ring-1 outline-none focus:ring-pink-500 focus:border-pink-500 transition-colors duration-200 text-white placeholder-gray-400"
                     placeholder="Enter your email address"
                   />
                 </div>
@@ -97,8 +99,8 @@ const Contact = () => {
                     id="message"
                     name="message"
                     required
-                    rows={6}
-                    className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-colors duration-200 text-white placeholder-gray-400 resize-y"
+                    rows={10}
+                    className="w-full px-4 py-3 bg-gray-800 resize-none border outline-none border-gray-700 rounded-lg focus:ring-1 focus:ring-pink-500 focus:border-pink-500 transition-colors scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-gray-900 duration-200 text-white placeholder-gray-400 "
                     placeholder="Enter your message..."
                   />
                 </div>
