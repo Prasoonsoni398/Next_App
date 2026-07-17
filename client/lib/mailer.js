@@ -3,10 +3,10 @@ import nodemailer from 'nodemailer';
 let devTransporter = null;
 
 const getTransporter = async () => {
-    if (process.env.NODE_ENV === 'production') {
+    if (process.env.SMTP_USER && process.env.SMTP_PASS) {
         return nodemailer.createTransport({
-            host: process.env.SMTP_HOST,
-            port: process.env.SMTP_PORT,
+            host: process.env.SMTP_HOST || 'smtp.gmail.com',
+            port: process.env.SMTP_PORT || 587,
             secure: process.env.SMTP_SECURE === 'true',
             auth: {
                 user: process.env.SMTP_USER,
@@ -52,20 +52,18 @@ export const sendVerificationEmail = async (email, token) => {
     }
 };
 
-export const sendPasswordResetEmail = async (email, token) => {
+export const sendPasswordResetOTP = async (email, otp) => {
     const transporter = await getTransporter();
-    
-    const resetUrl = `http://localhost:3000/reset-password?token=${token}`;
     
     const info = await transporter.sendMail({
         from: '"Hospital App" <noreply@hospitalapp.com>',
-        to: email,
-        subject: "Reset your password",
+        to: "sonprasoon395@gmail.com",
+        subject: "Your Password Reset Code",
         html: `
-            <h1>Password Reset Request</h1>
-            <p>You requested a password reset. Click the link below to reset your password:</p>
-            <a href="${resetUrl}">${resetUrl}</a>
-            <p>If you did not request this, please ignore this email.</p>
+            <h1>Password Reset OTP</h1>
+            <p>You requested a password reset. Your 6-digit verification code is:</p>
+            <h2 style="font-size: 24px; letter-spacing: 4px; color: #db2777;">${otp}</h2>
+            <p>This code is valid for 10 minutes. If you did not request this, please ignore this email.</p>
         `,
     });
 

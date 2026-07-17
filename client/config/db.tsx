@@ -6,7 +6,7 @@ export const db = mysql.createPool({
     user:"root",
     password:"StrongPassword_123",
     database:"hospital_db"
-})
+}) 
 
 try {
   const connection = await db.getConnection();

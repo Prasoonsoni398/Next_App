@@ -2,11 +2,11 @@
 import { db } from "@/config/db";
 import bcrypt from "bcryptjs";
 
-export const resetPasswordAction = async (formData) => {
+export const resetPasswordOTPAction = async (formData) => {
   try {
-    const { token, password, confirmPassword } = Object.fromEntries(formData.entries());
+    const { email, otp, password, confirmPassword } = Object.fromEntries(formData.entries());
 
-    if (!token || !password || !confirmPassword) {
+    if (!email || !otp || !password || !confirmPassword) {
       return { success: false, message: "All fields are required" };
     }
 
@@ -18,14 +18,14 @@ export const resetPasswordAction = async (formData) => {
       return { success: false, message: "Passwords do not match" };
     }
 
-    // Find the user with this token
+    // Find the user with this email and OTP
     const [users] = await db.execute(
-      `SELECT id, reset_token_expires_at FROM users WHERE reset_token = ?`,
-      [token]
+      `SELECT id, reset_token_expires_at FROM users WHERE email = ? AND reset_token = ?`,
+      [email, otp]
     );
 
     if (users.length === 0) {
-      return { success: false, message: "Invalid or expired reset token" };
+      return { success: false, message: "Invalid OTP code." };
     }
 
     const user = users[0];
@@ -35,7 +35,7 @@ export const resetPasswordAction = async (formData) => {
     const expiresAt = new Date(user.reset_token_expires_at);
 
     if (now > expiresAt) {
-      return { success: false, message: "Reset token has expired. Please request a new one." };
+      return { success: false, message: "OTP code has expired. Please request a new one." };
     }
 
     // Hash the new password
